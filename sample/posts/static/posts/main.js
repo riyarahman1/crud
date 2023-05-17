@@ -11,7 +11,7 @@ const body = document.getElementById('id_body')
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
 const alertBox = document.getElementById('alert-box')
-console.log('csrf', csrf)
+console.log('csrf', csrf[0].value)
 
 const getCookie = (name) => {
     let cookieValue = null;
@@ -30,7 +30,7 @@ const getCookie = (name) => {
 }
 const csrftoken = getCookie('csrftoken');
 
-const likeunlikePosts = () => {
+const likeUnlikePosts = () => {
     const likeUnlikeForms = [...document.getElementsByClassName('like-unlike-forms')]
     likeUnlikeForms.forEach(form => form.addEventListener('submit', e => {
         e.preventDefault()
@@ -57,7 +57,7 @@ const likeunlikePosts = () => {
 }
 
 let visible = 3
- 
+
 
 const getData = () => {
     $.ajax({
@@ -79,19 +79,21 @@ const getData = () => {
                             <div class="card-footer">
                                 <div class="row">
                                     <div class="col-2">
-                                        <a href="#" class="btn btn-primary">Details</a>
+                                        <a  class="btn btn-primary">Details</a>
                                     </div>
                                     <div class="col-2">
                                         <form class="like-unlike-forms" data-form-id="${el.id}">
-                                            <button href="#" class="btn btn-primary" id="like-unlike-${el.id}">${el.liked ? `Unlike (${el.count})` : `Like (${el.count})`}</button>
-                                        </form>    
+                                            <button class="btn btn-primary" id="like-unlike-${el.id}">
+                                            ${el.liked ? `Unlike (${el.count})` : `Like (${el.count})`}
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
                      `
                 });
-
+                likeUnlikePosts()
             }, 100)
             console.log(response.size)
             if (response.size === 0) {
@@ -136,28 +138,28 @@ postForm.addEventListener('submit', e => {
                     <div class="card-body">
                         <h5 class="card-title">${response.title}</h5>
                         <p class="card-text">${response.body}</p>
-                     </div>
+                    </div>
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-2">
-                                <a href="#" class="btn btn-primary">Details</a>
+                                <a  class="btn btn-primary">Details</a>
                             </div>
                             <div class="col-2">
                                 <form class="like-unlike-forms" data-form-id="${response.id}">
-                                    <button href="#" class="btn btn-primary" id="like-unlike-${response.id}">Like</button>
+                                    <button class="btn btn-primary" id="like-unlike-${response.id}">
+                                        Like (0)
+                                    </button>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
             `)
-            likeunlikePosts()
+            likeUnlikePosts()
             $('#addPostModal').modal('hide')
-            handleAlerts('success', 'New post added!')
-            postForm.reset()
-
+            handleAlerts('success', 'New Post added!')
         },
-        error: function (error) {
+        error: function(error) {
             console.log(error)
             handleAlerts('danger', 'ups....something went wrong')
         }
