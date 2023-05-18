@@ -10,6 +10,11 @@ const body = document.getElementById('id_body')
 
 const csrf = document.getElementsByName('csrfmiddlewaretoken')
 
+
+const url = window.location.href
+// console.log(window.location)
+
+
 const alertBox = document.getElementById('alert-box')
 console.log('csrf', csrf[0].value)
 
@@ -28,7 +33,19 @@ const getCookie = (name) => {
     }
     return cookieValue;
 }
+
+
 const csrftoken = getCookie('csrftoken');
+
+
+
+const deleted = localStorage.getItem('title')
+if (deleted){
+    handleAlerts('danger',`deleted"${deleted}`)
+    localStorage.clear()
+}
+
+
 
 const likeUnlikePosts = () => {
     const likeUnlikeForms = [...document.getElementsByClassName('like-unlike-forms')]
@@ -79,7 +96,7 @@ const getData = () => {
                             <div class="card-footer">
                                 <div class="row">
                                     <div class="col-2">
-                                        <a  class="btn btn-primary">Details</a>
+                                        <a href="${url}${el.id}" class="btn btn-primary">Details</a>
                                     </div>
                                     <div class="col-2">
                                         <form class="like-unlike-forms" data-form-id="${el.id}">
@@ -132,7 +149,7 @@ postForm.addEventListener('submit', e => {
             'body': body.value
         },
         success: function (response) {
-            console.log(response)
+             console.log(response)
             postsBox.insertAdjacentHTML('afterbegin', `
                 <div class="card mb-2">
                     <div class="card-body">
@@ -158,6 +175,7 @@ postForm.addEventListener('submit', e => {
             likeUnlikePosts()
             $('#addPostModal').modal('hide')
             handleAlerts('success', 'New Post added!')
+            postForm.reset()
         },
         error: function(error) {
             console.log(error)
